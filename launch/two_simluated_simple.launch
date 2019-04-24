@@ -9,7 +9,8 @@ Launch file for running the multirobot simulation on gazebo
 <include file="$(find gazebo_ros)/launch/empty_world.launch">
 <arg name="use_sim_time" value="true"/>
 <arg name="debug" value="false"/>
-<arg name="world_name" value="$(find rrt_exploration_tutorials)/launch/includes/worlds/MTR.world"/>
+<!-- <arg name="world_name" value="$(find rrt_exploration_tutorials)/launch/includes/worlds/house.world"/> -->
+<arg name="world_name" value="$(find exercises)/part1/ros/worlds/simple.world"/>
 </include>
 
 
@@ -38,7 +39,7 @@ Launch file for running the multirobot simulation on gazebo
 </group>
 
 <!-- spawn robot 3-->
-<group ns="/robot_3">
+<!-- <group ns="/robot_3">
 	<include file="$(find rrt_exploration_tutorials)/launch/includes/robot.launch.xml">
 		<arg name="robot_name" value="robot_3"/>
 		<arg name="init_pose" value="-x 0.0 -y 0.8 -z 0.0"/>
@@ -46,23 +47,56 @@ Launch file for running the multirobot simulation on gazebo
 	<include file="$(find rrt_exploration_tutorials)/launch/includes/move_baseSafe.launch">
 		<arg name="namespace" value="robot_3"/>
 	</include> 
-</group>
+</group> -->
 
 
 
 <!-- transformation between robots-->
 <node pkg="tf" type="static_transform_publisher" name="robot2_to_robot1" args="0 -0.8 0 0 0 0 /robot_1/map /robot_2/map 20" />
-<node pkg="tf" type="static_transform_publisher" name="robot3_to_robot1" args="0 0.8 0 0 0 0 /robot_1/map /robot_3/map 20" />
+<!-- <node pkg="tf" type="static_transform_publisher" name="robot3_to_robot1" args="0 0.8 0 0 0 0 /robot_1/map /robot_3/map 20" /> -->
 
 <!-- Map megring (know inital position case)-->
-<!-- <include file="$(find multi_kobuki_gazebo)/launch/includes/initposes.launch"/> -->
-<!-- <include file="$(find multirobot_map_merge)/launch/map_merge.launch"/> -->
-<include file="$(find rrt_exploration_tutorials)/launch/includes/initposes.launch"/>
-<include file="$(find rrt_exploration_tutorials)/launch/includes/map_merge.launch"/>
+
+<!-- <include file="$(find rrt_exploration_tutorials)/launch/includes/initposes.launch"/> -->
+<group ns="/robot_1/map_merge">
+  <param name="init_pose_x" value="0.0"/>
+  <param name="init_pose_y" value="0.0"/>
+  <param name="init_pose_z" value="0.0"/>
+  <param name="init_pose_yaw" value="0.0"/>
+</group>
+<group ns="/robot_2/map_merge">
+  <param name="init_pose_x" value="0.0"/>
+  <!--param name="init_pose_y" value="-1.0"/-->
+  <param name="init_pose_y" value="-0.8"/>
+  <param name="init_pose_z" value="0.0"/>
+  <param name="init_pose_yaw" value="0.0"/>
+</group>
+
+<!-- <group ns="/robot_3/map_merge">
+  <param name="init_pose_x" value="0.0"/>
+  <param name="init_pose_y" value="0.8"/>
+  <param name="init_pose_z" value="0.0"/>
+  <param name="init_pose_yaw" value="0.0"/>
+</group> -->
+
+<!-- <include file="$(find rrt_exploration_tutorials)/launch/includes/map_merge.launch"/> -->
+<group ns="map_merge">
+  <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+    <param name="robot_map_topic" value="map"/>
+    <param name="robot_namespace" value=""/>
+    <param name="merged_map_topic" value="map"/>
+    <param name="world_frame" value="/robot_1/map"/>
+    <param name="known_init_poses" value="true"/>
+    <param name="merging_rate" value="4.0"/>
+    <param name="discovery_rate" value="0.05"/>
+    <param name="estimation_rate" value="0.5"/>
+    <param name="estimation_confidence" value="1.0"/>
+  </node>
+</group>
+
 
 
 <!-- run RViz node (visualization) -->
-<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find multi_kobuki_gazebo)/launch/rviz_config/three.rviz"> -->
 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rrt_exploration_tutorials)/launch/includes/rviz_config/three.rviz">
 <remap from="move_base_simple/goal" to="robot_1/move_base_simple/goal"/>
 </node>
