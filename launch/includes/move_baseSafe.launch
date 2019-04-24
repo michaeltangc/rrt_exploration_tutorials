@@ -3,7 +3,7 @@
   <master auto="start"/>
 
   <arg name="namespace"/>
-  <arg name="map_namespace" default="$(arg namespace)">
+  <arg name="map_namespace" default="$(arg namespace)"/>
 
 <param name="use_sim_time" value="true" />
 
@@ -32,10 +32,10 @@
       <param name="temporalUpdate" value="0.1"/>
       <param name="resampleThreshold" value="0.5"/>
       <param name="particles" value="30"/>
-      <param name="xmin" value="-5.0"/>
-      <param name="ymin" value="-5.0"/>
-      <param name="xmax" value="5.0"/>
-      <param name="ymax" value="5.0"/>
+      <param name="xmin" value="-10.0"/>
+      <param name="ymin" value="-10.0"/>
+      <param name="xmax" value="15.0"/>
+      <param name="ymax" value="15.0"/>
       <param name="delta" value="0.1"/>
       <param name="llsamplerange" value="0.01"/>
       <param name="llsamplestep" value="0.01"/>

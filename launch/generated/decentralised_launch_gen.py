@@ -57,7 +57,7 @@ sections = {
 
     <node pkg="rrt_exploration" type="global_rrt_detector" name="{robot_name:s}_global_rrt_detector" output="screen">
         <param name="eta" value="$(arg Geta)"/>
-        <param name="map_topic" value="/map_merge/map"/>
+        <param name="map_topic" value="/{robot_name:s}/map_merge/map"/>
 
         <param name="detected_points_topic" value="/{robot_name:s}/detected_points"/> 
     </node>
@@ -71,9 +71,9 @@ sections = {
     </node>
 """,
 6:"""
-    <group ns="/robot_1">
+    <group ns="/{robot_name:s}">
         <node pkg="rrt_exploration" type="filter.py" name="{robot_name:s}_filter" output="screen">
-            <param name="map_topic" value="/map_merge/map"/>
+            <param name="map_topic" value="/{robot_name:s}/map_merge/map"/>
             <param name="info_radius" value="1"/> 
             <param name="costmap_clearing_threshold" value="70"/> 
             <param name="goals_topic" value="/{robot_name:s}/detected_points"/> 
@@ -86,7 +86,7 @@ sections = {
         
         
     <node pkg="rrt_exploration" type="assigner.py" name="{robot_name:s}_assigner" output="screen">
-        <param name="map_topic" value="/map_merge/map"/>
+        <param name="map_topic" value="/{robot_name:s}/map_merge/map"/>
         <param name="global_frame" value="/{robot_name:s}/map"/>
         <param name="info_radius" value="1"/> 
         <param name="info_multiplier" value="3.0"/> 
@@ -94,28 +94,40 @@ sections = {
         <param name="hysteresis_gain" value="2.0"/> 
         <param name="frontiers_topic" value="/{robot_name:s}/filtered_points"/> 
         <param name="n_robots" value="{num_robot:d}"/>
-        <param name="namespace_init_count" value="1{robot_id:d}"/>
+        <param name="namespace_init_count" value="{robot_id:d}"/>
         <param name="namespace" value="/robot_"/>
         <param name="delay_after_assignement" value="0.5"/>
         <param name="rate" value="100"/>
     </node>
 """,
+100:"""
+    <group ns="/{robot_name:s}">
+        <node pkg="rrt_exploration" type="map_relay.py" name="{robot_name:s}_map_relay" output="screen">
+            <param name="master_robot_name" value="{robot_name:s}"/>
+            <param name="other_robot_names" value="{other_robot_name:s}"/>
+            <param name="map_topic_name" value="map"/> 
+            <param name="relay_map_topic_suffix" value="{robot_name:s}_map_relay"/> 
+            <param name="maximum_range" value="{range:.1f}"/> 
+        </node>
+
+
+        <group ns="map_merge">
+            <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+                <param name="robot_map_topic" value="{robot_name:s}_map_relay"/>
+                <param name="robot_namespace" value=""/>
+                <param name="merged_map_topic" value="map"/>
+                <param name="world_frame" value="/robot_1/map"/>
+                <param name="known_init_poses" value="true"/>
+                <param name="merging_rate" value="4.0"/>
+                <param name="discovery_rate" value="0.01"/>
+                <param name="estimation_rate" value="0.5"/>
+                <param name="estimation_confidence" value="1.0"/>
+            </node>
+        </group>
+    </group>
+""",
 7:"""
     <!-- <include file="$(find rrt_exploration_tutorials)/launch/includes/map_merge.launch"/> -->
-
-    <group ns="map_merge">
-        <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
-            <param name="robot_map_topic" value="map"/>
-            <param name="robot_namespace" value=""/>
-            <param name="merged_map_topic" value="map"/>
-            <param name="world_frame" value="/robot_1/map"/>
-            <param name="known_init_poses" value="true"/>
-            <param name="merging_rate" value="10.0"/>
-            <param name="discovery_rate" value="0.05"/>
-            <param name="estimation_rate" value="0.5"/>
-            <param name="estimation_confidence" value="1.0"/>
-        </node>
-    </group>
 
     <!-- run RViz node (visualization) -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rrt_exploration_tutorials)/launch/includes/rviz_config/three_decentralised.rviz">
@@ -128,6 +140,7 @@ sections = {
 }
 
 def generate_file(num_robot, file_name, map_index):
+    init_num = 1
     num_robot = int(num_robot)
     map_index = int(map_index)
     file_name = 'decentralised_' + str(num_robot) + '_' + str(map_index) + '_run.launch' if file_name is None else file_name
@@ -136,8 +149,11 @@ def generate_file(num_robot, file_name, map_index):
         f.write(maps[map_index])
         f.write(sections[1])
         for i in range(num_robot):
-            robot_id = i+1
+            robot_id = i+init_num
             robot_name = "robot_{:d}".format(robot_id)
+            other_robot_name_list = ["robot_{:d}".format(j+init_num) for j in range(num_robot) if not j == i]
+            other_robot_name = ','.join(other_robot_name_list)
+            print(other_robot_name)
             x = 0.0
             y = 1.0 * ((i+1) // 2) * (-1 if i % 2 == 1 else 1)
             z = 0.0
@@ -148,6 +164,10 @@ def generate_file(num_robot, file_name, map_index):
             f.write(sections[4].format(robot_name=robot_name, x=x, y=y, z=z))
             f.write(sections[5].format(robot_name=robot_name))
             f.write(sections[6].format(robot_name=robot_name, num_robot=1, robot_id=robot_id))
+            f.write(sections[100].format(robot_name=robot_name, other_robot_name=other_robot_name, range=5.0))
+
+
+            
         f.write(sections[7])
 
 if __name__ == '__main__':
