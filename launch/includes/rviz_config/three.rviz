@@ -3,7 +3,8 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Marker5
       Splitter Ratio: 0.5
     Tree Height: 275
   - Class: rviz/Selection
@@ -103,32 +104,6 @@ Visualization Manager:
           Value: true
         robot_1/wheel_right_link:
           Value: true
-        robot_2/base_footprint:
-          Value: true
-        robot_2/base_laser_link:
-          Value: true
-        robot_2/base_link:
-          Value: true
-        robot_2/caster_back_link:
-          Value: true
-        robot_2/caster_front_link:
-          Value: true
-        robot_2/cliff_sensor_front_link:
-          Value: true
-        robot_2/cliff_sensor_left_link:
-          Value: true
-        robot_2/cliff_sensor_right_link:
-          Value: true
-        robot_2/gyro_link:
-          Value: true
-        robot_2/map:
-          Value: true
-        robot_2/odom:
-          Value: true
-        robot_2/wheel_left_link:
-          Value: true
-        robot_2/wheel_right_link:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -157,28 +132,6 @@ Visualization Manager:
                   {}
                 robot_1/wheel_right_link:
                   {}
-          robot_2/map:
-            robot_2/odom:
-              robot_2/base_footprint:
-                robot_2/base_link:
-                  robot_2/base_laser_link:
-                    {}
-                  robot_2/caster_back_link:
-                    {}
-                  robot_2/caster_front_link:
-                    {}
-                  robot_2/cliff_sensor_front_link:
-                    {}
-                  robot_2/cliff_sensor_left_link:
-                    {}
-                  robot_2/cliff_sensor_right_link:
-                    {}
-                  robot_2/gyro_link:
-                    {}
-                  robot_2/wheel_left_link:
-                    {}
-                  robot_2/wheel_right_link:
-                    {}
       Update Interval: 0
       Value: true
     - Class: rviz/Marker
@@ -307,16 +260,8 @@ Visualization Manager:
       Queue Size: 100
       Value: false
     - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /centroids
-      Name: Marker
-      Namespaces:
-        markers3: true
-      Queue Size: 100
-      Value: true
-    - Class: rviz/Marker
       Enabled: false
-      Marker Topic: /robot3_rrt_detector_shapes
+      Marker Topic: /centroids
       Name: Marker
       Namespaces:
         {}
@@ -324,7 +269,15 @@ Visualization Manager:
       Value: false
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /robot_1_rrt_detector_shapes
+      Marker Topic: /robot3_rrt_detector_shapes
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot_1_rrt_detector/shapes
       Name: Marker
       Namespaces:
         markers: true
@@ -335,7 +288,7 @@ Visualization Manager:
       Marker Topic: /robot_2_rrt_detector_shapes
       Name: Marker
       Namespaces:
-        markers: true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true

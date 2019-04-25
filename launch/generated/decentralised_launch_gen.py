@@ -98,6 +98,7 @@ sections = {
         <param name="namespace" value="/robot_"/>
         <param name="delay_after_assignement" value="0.5"/>
         <param name="rate" value="100"/>
+        <param name="simulation_summary_string" value="de_{total_num_robot:d}_{map_index:d}_{range:d}_{robot_name:s}"/>
     </node>
 """,
 100:"""
@@ -118,7 +119,7 @@ sections = {
                 <param name="merged_map_topic" value="map"/>
                 <param name="world_frame" value="/robot_1/map"/>
                 <param name="known_init_poses" value="true"/>
-                <param name="merging_rate" value="4.0"/>
+                <param name="merging_rate" value="1.0"/>
                 <param name="discovery_rate" value="0.01"/>
                 <param name="estimation_rate" value="0.5"/>
                 <param name="estimation_confidence" value="1.0"/>
@@ -129,6 +130,9 @@ sections = {
 7:"""
     <!-- <include file="$(find rrt_exploration_tutorials)/launch/includes/map_merge.launch"/> -->
 
+    <node pkg="rrt_exploration" type="autostart.py" name="autostart" output="screen">
+        <param name="delay" value="8.0"/>
+    </node>
     <!-- run RViz node (visualization) -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rrt_exploration_tutorials)/launch/includes/rviz_config/three_decentralised.rviz">
         <remap from="move_base_simple/goal" to="robot_1/move_base_simple/goal"/>
@@ -141,6 +145,8 @@ sections = {
 
 def generate_file(num_robot, file_name, map_index):
     init_num = 1
+    maximum_range = 2
+
     num_robot = int(num_robot)
     map_index = int(map_index)
     file_name = 'decentralised_' + str(num_robot) + '_' + str(map_index) + '_run.launch' if file_name is None else file_name
@@ -153,7 +159,7 @@ def generate_file(num_robot, file_name, map_index):
             robot_name = "robot_{:d}".format(robot_id)
             other_robot_name_list = ["robot_{:d}".format(j+init_num) for j in range(num_robot) if not j == i]
             other_robot_name = ','.join(other_robot_name_list)
-            print(other_robot_name)
+            # print(other_robot_name)
             x = 0.0
             y = 1.0 * ((i+1) // 2) * (-1 if i % 2 == 1 else 1)
             z = 0.0
@@ -163,8 +169,8 @@ def generate_file(num_robot, file_name, map_index):
                 f.write(sections[3].format(robot_name=robot_name, x=x, y=y, z=z))
             f.write(sections[4].format(robot_name=robot_name, x=x, y=y, z=z))
             f.write(sections[5].format(robot_name=robot_name))
-            f.write(sections[6].format(robot_name=robot_name, num_robot=1, robot_id=robot_id))
-            f.write(sections[100].format(robot_name=robot_name, other_robot_name=other_robot_name, range=5.0))
+            f.write(sections[6].format(robot_name=robot_name, num_robot=1, total_num_robot=num_robot, robot_id=robot_id, map_index=map_index, range=maximum_range))
+            f.write(sections[100].format(robot_name=robot_name, other_robot_name=other_robot_name, range=maximum_range))
 
 
             
@@ -176,6 +182,11 @@ if __name__ == '__main__':
     parser.add_argument('--file_name', action='store', default=None)
     parser.add_argument('--map_index', action='store', default=0)
     args, unknown = parser.parse_known_args()
-    generate_file(args.num_robot, args.file_name, args.map_index)
+    if int(args.map_index) == -1:
+        for i in range(1, 5):
+            for j in range(4):
+                generate_file(i, None, j)
+    else:
+        generate_file(args.num_robot, args.file_name, args.map_index)
 
 

@@ -3,8 +3,7 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /Marker2
+      Expanded: ~
       Splitter Ratio: 0.5
     Tree Height: 275
   - Class: rviz/Selection
@@ -104,6 +103,32 @@ Visualization Manager:
           Value: true
         robot_1/wheel_right_link:
           Value: true
+        robot_2/base_footprint:
+          Value: true
+        robot_2/base_laser_link:
+          Value: true
+        robot_2/base_link:
+          Value: true
+        robot_2/caster_back_link:
+          Value: true
+        robot_2/caster_front_link:
+          Value: true
+        robot_2/cliff_sensor_front_link:
+          Value: true
+        robot_2/cliff_sensor_left_link:
+          Value: true
+        robot_2/cliff_sensor_right_link:
+          Value: true
+        robot_2/gyro_link:
+          Value: true
+        robot_2/map:
+          Value: true
+        robot_2/odom:
+          Value: true
+        robot_2/wheel_left_link:
+          Value: true
+        robot_2/wheel_right_link:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -132,6 +157,28 @@ Visualization Manager:
                   {}
                 robot_1/wheel_right_link:
                   {}
+          robot_2/map:
+            robot_2/odom:
+              robot_2/base_footprint:
+                robot_2/base_link:
+                  robot_2/base_laser_link:
+                    {}
+                  robot_2/caster_back_link:
+                    {}
+                  robot_2/caster_front_link:
+                    {}
+                  robot_2/cliff_sensor_front_link:
+                    {}
+                  robot_2/cliff_sensor_left_link:
+                    {}
+                  robot_2/cliff_sensor_right_link:
+                    {}
+                  robot_2/gyro_link:
+                    {}
+                  robot_2/wheel_left_link:
+                    {}
+                  robot_2/wheel_right_link:
+                    {}
       Update Interval: 0
       Value: true
     - Class: rviz/Marker
@@ -146,42 +193,42 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: Map
       Topic: /map_merge/map
       Unreliable: false
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.100000001
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: Map
       Topic: /robot_1/move_base_node/global_costmap/costmap
       Unreliable: false
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.100000001
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Map
       Topic: /robot_2/move_base_node/global_costmap/costmap
       Unreliable: false
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.100000001
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: Map
       Topic: /robot_3/move_base_node/global_costmap/costmap
       Unreliable: false
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
@@ -252,13 +299,13 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /robot_1_global_rrt_detector/shapes
       Name: Marker
       Namespaces:
-        markers: true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /robot_1_rrt_detector/shapes
@@ -267,12 +314,58 @@ Visualization Manager:
         markers: true
       Queue Size: 100
       Value: true
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /robot_1/map_merge/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /robot_1/centroids
       Name: Marker
       Namespaces:
         markers3: true
+      Queue Size: 100
+      Value: true
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /robot_2/map_merge/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot_2/centroids
+      Name: Marker
+      Namespaces:
+        markers3: true
+      Queue Size: 100
+      Value: true
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /robot_3/map_merge/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot_3/centroids
+      Name: Marker
+      Namespaces:
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -333,5 +426,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1051
-  X: 65
-  Y: 24
+  X: 3373
+  Y: 283
